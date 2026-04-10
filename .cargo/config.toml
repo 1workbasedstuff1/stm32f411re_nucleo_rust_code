@@ -1,0 +1,23 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+# NOTE: to run debugger
+runner = ["probe-rs", "run", "--chip", "STM32F411RETx", "--log-format=oneline"]
+
+# runner = ["probe-rs", "download", "--chip", "STM32F411RETx"]
+
+rustflags = [
+  "-C", "linker=flip-link",
+  "-C", "link-arg=-Tlink.x",
+  # "-C", "link-arg=-Tdefmt.x",
+  "-C", "link-arg=--nmagic",
+# "-C", "target-cpu=cortex-m4",
+"-C", "target-feature=+vfp4",
+]
+
+[build]
+target = "thumbv7em-none-eabihf"
+
+[alias]
+# `cargo rb foo` will expand to `cargo run --bin foo`
+rb = "run --bin"
+# `cargo rrb foo` will expand to `cargo run --release --bin foo`
+rrb = "run --release --bin"

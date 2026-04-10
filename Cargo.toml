@@ -1,0 +1,94 @@
+[package]
+name = "stm32f411_nucleo"
+version = "0.1.0"
+edition = "2024"
+
+
+[[bin]]
+name = "blinky"
+path = "src/bin/blinky.rs"
+test = false
+
+[[bin]]
+name = "hello"
+path = "src/bin/hello.rs"
+test = false
+
+[[bin]]
+name = "imu_mpu_test"
+path = "src/bin/imu_mpu_test.rs"
+test = false
+
+[[bin]]
+name = "motor"
+path = "src/bin/motor.rs"
+test = false
+
+[[bin]]
+name = "imu_burst_read"
+path = "src/bin/imu_burst_read.rs"
+test = false
+
+[[bin]]
+name = "floattest"
+path = "src/bin/floattest.rs"
+test = false
+
+[[bin]]
+name = "led_exti"
+path = "src/bin/led_exti.rs"
+test = false
+
+[[bin]]
+name = "button_interrupt"
+path = "src/bin/button_interrupt.rs"
+test = false
+
+
+# [lib]
+# harness = false
+#
+# # needed for each integration test
+# [[test]]
+# name = "integration"
+# harness = false
+
+[dependencies]
+cortex-m = "0.7"        # Cortex-M support
+cortex-m-rt = "0.7"     # Runtime (entry point, vector table)
+cortex-m-semihosting = "0.5"  # Optional for debugging
+stm32f4 = { version = "0.15", features = ["stm32f411"] } # PAC
+panic-halt = "0.2"
+# panic-probe = { version = "1.0", features = ["print-defmt"] }
+# semihosting = "0.1.20"
+
+# [dependencies]
+# cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
+# cortex-m-rt = "0.7"
+# defmt = "1.0"
+# defmt-semihosting = "0.3.0"
+# panic-probe = { version = "1.0", features = ["print-defmt"] }
+# semihosting = "0.1.20"
+# # TODO(4) enter your HAL here
+# # some-hal = "1.2.3"
+
+[profile.dev]
+opt-level = 0              # no optimization; keeps variables and code layout simple
+debug = 2                  # include full debug info
+overflow-checks = true     # runtime integer checks
+lto = false                # don't do link-time optimization in dev
+codegen-units = 1          # easier to debug
+
+# trade compile speed for slightly better optimisations
+# codegen-units = 1
+
+[profile.release]
+opt-level = 's'            # small code, still optimized
+debug = 2                  # keep symbols for GDB
+codegen-units = 1
+lto = 'fat'                # link-time optimizations
+overflow-checks = false    # optional
+
+[package.metadata.cargo-embed]
+linker = "memory.x"
+

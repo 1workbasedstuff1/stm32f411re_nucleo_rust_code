@@ -11,12 +11,16 @@ fn compute_uart_bd(periph_clk: u32, baudrate: u32) -> u16 {
 }
 
 /// Set the baud rate for USART2
-fn uart_set_baudrate(usart2: &stm32f411::USART2, periph_clk: u32, baudrate: u32) {
+fn uart_set_baudrate(
+    usart2: &stm32f411::USART2,
+    periph_clk: u32,
+    baudrate: u32,
+) {
     let brr_val = compute_uart_bd(periph_clk, baudrate);
     usart2.brr.write(|w| unsafe { w.bits(brr_val as u32) });
 }
 
-pub fn uart2_init(dp: &stm32f411::Peripherals) {
+pub fn uart2_init(dp: &stm32f411::Peripherals, baudrate: u32) {
     // set gpioaen
     dp.RCC.ahb1enr.modify(|_, w| w.gpioaen().set_bit());
 
@@ -32,7 +36,7 @@ pub fn uart2_init(dp: &stm32f411::Peripherals) {
     dp.RCC.apb1enr.modify(|_, w| w.usart2en().set_bit());
 
     // stm32f411 clock rate is 16MHz
-    uart_set_baudrate(&dp.USART2, 16_000_000, 115200);
+    uart_set_baudrate(&dp.USART2, 16_000_000);
 
     // configure transfer direction
     // WARN: may need to clear whole register to match the
@@ -79,4 +83,13 @@ impl<'a> core::fmt::Write for Uart<'a> {
         uart2_print(self.usart, s);
         Ok(())
     }
+}
+
+// uart rx pin reading
+fn uart_read(usart2: &stm32f411::USART2) -> u8 {
+    // Wait until RXNE (Receive Not Empty)
+    while usart2.sr.read().rxne().bit_is_clear() {}
+
+    // Read received byte
+    usart2.dr.read().dr().bits() as u8
 }

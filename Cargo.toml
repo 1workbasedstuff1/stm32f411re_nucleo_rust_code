@@ -44,6 +44,16 @@ name = "button_interrupt"
 path = "src/bin/button_interrupt.rs"
 test = false
 
+[[bin]]
+name = "button_interrupt_2"
+path = "src/bin/button_interrupt_2.rs"
+test = false
+
+[[bin]]
+name = "matrix_testing"
+path = "src/bin/matrix_testing.rs"
+test = false
+
 
 # [lib]
 # harness = false
@@ -61,6 +71,10 @@ stm32f4 = { version = "0.15", features = ["stm32f411"] } # PAC
 panic-halt = "0.2"
 # panic-probe = { version = "1.0", features = ["print-defmt"] }
 # semihosting = "0.1.20"
+
+# disabling default features means that we dont include heap features
+# libm enables sin and sqrt without std
+nalgebra = { version = "0.33", default-features = false, features = ["libm"] }
 
 # [dependencies]
 # cortex-m = { version = "0.7", features = ["critical-section-single-core"] }

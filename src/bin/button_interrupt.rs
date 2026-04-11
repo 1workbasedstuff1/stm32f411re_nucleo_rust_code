@@ -21,7 +21,7 @@ static USART2: Mutex<RefCell<Option<stm32f411::USART2>>> =
 #[entry]
 fn main() -> ! {
     let periph = stm32f411::Peripherals::take().unwrap();
-    uart::uart2_init(&periph);
+    uart::uart2_init(&periph, 115200);
     button_interrupt::led_init(&periph);
     button_interrupt::pc13_exti_init(&periph);
 
@@ -34,7 +34,24 @@ fn main() -> ! {
         USART2.borrow(cs).replace(Some(periph.USART2));
     });
 
-    loop {}
+    // uart::uart2_print(&periph.USART2, "value");
+    cortex_m::interrupt::free(|cs| {
+        if let Some(usart) = USART2.borrow(cs).borrow_mut().as_mut() {
+            let mut uart = uart::Uart::new(usart);
+            write!(uart, "value\n").ok();
+        }
+    });
+
+    loop {
+        cortex_m::interrupt::free(|cs| {
+            if let Some(usart) = USART2.borrow(cs).borrow_mut().as_mut() {
+                let mut uart = uart::Uart::new(usart);
+                write!(uart, "value\n").ok();
+            }
+        });
+
+        // for i in 0..10000 {}
+    }
 }
 
 #[interrupt]
@@ -46,6 +63,7 @@ fn EXTI15_10() {
         dp.EXTI.pr.write(|w| w.pr13().set_bit());
 
         // Borrow USART2 from the global static
+        // ensure interrupts are disabled
         cortex_m::interrupt::free(|cs| {
             if let Some(usart) = USART2.borrow(cs).borrow_mut().as_mut() {
                 let mut uart = uart::Uart::new(usart);

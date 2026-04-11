@@ -12,7 +12,7 @@ use stm32f411_nucleo::uart;
 fn main() -> ! {
     let periph = stm32f411::Peripherals::take().unwrap();
 
-    uart::uart2_init(&periph);
+    uart::uart2_init(&periph, 115200);
     let mut uart = uart::Uart::new(&periph.USART2);
     write!(uart, "uart init ok\n").ok();
 

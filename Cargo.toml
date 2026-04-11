@@ -54,6 +54,11 @@ name = "matrix_testing"
 path = "src/bin/matrix_testing.rs"
 test = false
 
+[[bin]]
+name = "gps_reading"
+path = "src/bin/gps_reading.rs"
+test = false
+
 
 # [lib]
 # harness = false

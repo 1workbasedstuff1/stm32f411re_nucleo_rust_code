@@ -12,7 +12,7 @@ fn main() -> ! {
     let dp = stm32f411::Peripherals::take().unwrap();
 
     gy37y3530::motor_setup(&dp);
-    uart::uart2_init(&dp);
+    uart::uart2_init(&dp, 115200);
     let mut uart = uart::Uart::new(&dp.USART2);
 
     // Read initial state of PA2/PA3 for encoder

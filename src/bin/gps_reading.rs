@@ -39,6 +39,8 @@ fn main() -> ! {
         //         core::str::from_utf8(&buf).unwrap_or("\r\n?\r\n"),
         //     );
         // }
+        //
+        uart2_print(&dp.USART2, "work\n");
 
         match uart::uart1_try_read(&dp.USART1) {
             None => {} //uart2_print(&dp.USART2, "\r\nno input\r\n"),

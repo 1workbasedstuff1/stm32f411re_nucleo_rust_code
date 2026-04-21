@@ -3,6 +3,11 @@ name = "stm32f411_nucleo"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "ekf"
+path = "src/bin/ekf.rs"
+test = false
+
 
 [[bin]]
 name = "blinky"
@@ -80,6 +85,8 @@ panic-halt = "0.2"
 # disabling default features means that we dont include heap features
 # libm enables sin and sqrt without std
 nalgebra = { version = "0.33", default-features = false, features = ["libm"] }
+
+ekf_filter = {path = "../embedded_kalman", package = "embedded_kalman"}
 
 # [dependencies]
 # cortex-m = { version = "0.7", features = ["critical-section-single-core"] }

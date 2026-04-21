@@ -10,16 +10,16 @@ use stm32f411_nucleo::uart;
 fn main() -> ! {
     let dp = stm32f411::Peripherals::take().unwrap();
 
-    uart::uart2_init(&dp);
+    uart::uart2_init(&dp, 115200);
     let mut uart = uart::Uart::new(&dp.USART2);
 
     let mut count: u32 = 1;
 
     loop {
         // uart::uart2_print(&dp.USART2, "hello\n");
-        write!(uart, "count: {}\n", count).ok();
+        write!(uart, "count: {}\r\n", count).ok();
         count += 1;
-        for _ in 0..1 {
+        for _ in 0..10000 {
             cortex_m::asm::nop();
         }
     }

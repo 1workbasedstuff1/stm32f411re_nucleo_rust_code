@@ -23,7 +23,7 @@ static PERIPHERALS: Mutex<RefCell<Option<SharedPeripherals>>> =
 #[entry]
 fn main() -> ! {
     let periph = stm32f411::Peripherals::take().unwrap();
-    uart::uart2_init(&periph);
+    uart::uart2_init(&periph, 115200);
     button_interrupt::led_init(&periph);
     button_interrupt::pc13_exti_init(&periph);
 

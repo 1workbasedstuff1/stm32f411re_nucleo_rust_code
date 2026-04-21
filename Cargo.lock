@@ -90,6 +90,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "embedded_kalman"
+version = "0.1.0"
+dependencies = [
+ "nalgebra",
+]
+
+[[package]]
 name = "libm"
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -247,6 +254,7 @@ dependencies = [
  "cortex-m",
  "cortex-m-rt",
  "cortex-m-semihosting",
+ "embedded_kalman",
  "nalgebra",
  "panic-halt",
  "stm32f4",

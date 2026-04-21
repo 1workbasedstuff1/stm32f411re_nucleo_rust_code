@@ -48,6 +48,7 @@ pub fn uart2_init(dp: &stm32f411::Peripherals, baudrate: u32) {
 }
 
 // configure PA3 for UART2_RX
+// WARN: doesnt work because rx is locked on stm32 nucleo board
 pub fn uart2_rx_init(dp: &stm32f411::Peripherals, baudrate: u32) {
     // set gpioaen
     dp.RCC.ahb1enr.modify(|_, w| w.gpioaen().set_bit());
@@ -211,4 +212,3 @@ pub fn uart1_try_read(usart1: &stm32f411::USART1) -> Option<u8> {
         None
     }
 }
-
